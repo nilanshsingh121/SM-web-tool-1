@@ -1,3 +1,4 @@
-﻿
-flask 
-guincorn
+flask
+PyPDF2
+werkzeug
+gunicorn
