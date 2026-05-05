@@ -49,16 +49,8 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        lang = request.form.get('lang', 'hi')
-        if username in USERS and USERS[username] == password:
-            session['username'] = username
-            session['lang'] = lang
-            return redirect(url_for('index'))
-        return "Invalid credentials! Please try again."
-    return render_template('login.html')
+    # Login bypass - direct main page pe bhej do
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
