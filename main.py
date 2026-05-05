@@ -43,13 +43,16 @@ def get_locale():
 @app.route('/')
 def index():
     if 'username' not in session:
-        return redirect(url_for('login_page'))
+        session['username'] = 'student'   # Auto login
+        session['lang'] = 'hi'
+    
     lang = get_locale()
     return render_template('index.html', lang=lang, translations=TRANSLATIONS[lang])
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    # Login bypass - direct main page pe bhej do
+    # Login bypass
     return redirect(url_for('index'))
 
 @app.route('/logout')
