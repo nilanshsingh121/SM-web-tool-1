@@ -1,12 +1,16 @@
-﻿from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import os
 import datetime
 import math
 import PyPDF2
 from werkzeug.utils import secure_filename
 
+# Hindi Encoding Fix
+os.environ['PYTHONIOENCODING'] = 'utf-8'
+
 app = Flask(__name__)
 app.secret_key = 'studybuddy_secret_key_2026'
+app.config['JSON_AS_ASCII'] = False
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -28,12 +32,12 @@ TRANSLATIONS = {
         'login': 'Login'
     },
     'hi': {
-        'title': '????? ???',
-        'welcome': "?????? ?????! ?? ????? ????",
-        'planner': '????? ??????',
-        'analyzer': '??????? ????????',
-        'logout': '??????',
-        'login': '?????'
+        'title': 'स्टडी बडी',
+        'welcome': "अरे दोस्त! चलो पढ़ाई करते हैं",
+        'planner': 'स्टडी प्लानर',
+        'analyzer': 'रिसोर्स एनालाइजर',
+        'logout': 'लॉगआउट',
+        'login': 'लॉगिन'
     }
 }
 
@@ -43,22 +47,19 @@ def get_locale():
 @app.route('/')
 def index():
     if 'username' not in session:
-        session['username'] = 'student'   # Auto login
+        session['username'] = 'student'
         session['lang'] = 'hi'
-    
     lang = get_locale()
     return render_template('index.html', lang=lang, translations=TRANSLATIONS[lang])
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    # Login bypass
     return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login_page'))
+    return redirect(url_for('index'))
 
 @app.route('/set_lang/<lang>')
 def set_lang(lang):
@@ -139,7 +140,7 @@ def upload_pdf():
         text = "Could not extract text from PDF."
 
     return jsonify({
-        'summary': f"?? Summary of {filename}:\n\n{text[:800]}...",
+        'summary': f"📄 Summary of {filename}:\n\n{text[:800]}...",
         'flashcards': [
             {"q": "What is the main topic?", "a": "This PDF covers important concepts of the subject."},
             {"q": "Key takeaway?", "a": "Focus on definitions and examples given."}
@@ -154,7 +155,7 @@ def process_video():
     data = request.get_json()
     url = data.get('url', '')
     return jsonify({
-        'summary': f"?? Video Summary from: {url}\nThis video explains the topic clearly with examples.",
+        'summary': f"🎥 Video Summary from: {url}\nThis video explains the topic clearly with examples.",
         'flashcards': [
             {"q": "What does the video teach?", "a": "Core concepts with practical examples"},
             {"q": "Most important point?", "a": "Pay attention to the examples shown."}
