@@ -1,18 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ lang }}">
 <head>
-<meta name="google-site-verification" content="X3wwg1jjUsGA4MpBFRa3ucvgbHkxF6WZLU0iGgSyOz4" />
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FB5KDMPCE5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-FB5KDMPCE5');
-</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ translations['title'] }}</title>
@@ -23,9 +11,9 @@
     <nav class="navbar">
         <div class="logo">🤖 {{ translations['title'] }}</div>
         <div>
-            <a href="{{ url_for('set_lang', lang='en') }}">English</a> |
-            <a href="{{ url_for('set_lang', lang='hi') }}">हिंदी</a>
-            <a href="{{ url_for('logout') }}" style="margin-left: 20px;">{{ translations['logout'] }}</a>
+            <a href="{{ url_for('set_lang', lang='en') }}">🇬🇧 English</a> |
+            <a href="{{ url_for('set_lang', lang='hi') }}">🇮🇳 हिंदी</a>
+            <a href="{{ url_for('logout') }}" style="margin-left: 25px;">{{ translations['logout'] }}</a>
         </div>
     </nav>
 
@@ -41,11 +29,11 @@
         <!-- Study Planner Tab -->
         <div id="tab-0" class="tab-content active">
             <div class="card">
-                <h2>Generate Your Study Plan</h2>
+                <h2>📅 अपना स्टडी प्लान बनाएँ</h2>
                 <form id="study-form">
                     <div class="input-group">
-                        <label>Subjects (comma separated)</label>
-                        <input type="text" id="subjects" placeholder="Math, Physics, Chemistry" required>
+                        <label>विषय (comma से अलग करके लिखें)</label>
+                        <input type="text" id="subjects" placeholder="Math, Physics, Chemistry, Biology" required>
                     </div>
                     <div class="input-group">
                         <label>Exam Date</label>
@@ -56,7 +44,7 @@
             </div>
 
             <div id="results-container" class="card" style="display: none;">
-                <h2>Your Study Plan</h2>
+                <h2>📋 आपका स्टडी प्लान</h2>
                 <div id="study-plan"></div>
             </div>
         </div>
@@ -64,19 +52,17 @@
         <!-- Resource Analyzer Tab -->
         <div id="tab-1" class="tab-content">
             <div class="card">
-                <h2>Resource Analyzer</h2>
-                <p>Upload PDF or paste YouTube link to get summary, flashcards & notes</p>
+                <h2>🔍 Resource Analyzer</h2>
+                <p>PDF अपलोड करें या YouTube लिंक पेस्ट करें - Summary, Flashcards और Notes पाएँ</p>
 
-                <!-- PDF Upload -->
                 <div class="upload-area">
                     <h3>📄 Upload PDF</h3>
                     <input type="file" id="pdf-input" accept="application/pdf">
                     <button onclick="uploadPDF()">Analyze PDF</button>
                 </div>
 
-                <!-- Video URL -->
                 <div class="upload-area">
-                    <h3>🎬 YouTube / Video URL</h3>
+                    <h3>🎬 YouTube Video URL</h3>
                     <input type="text" id="video-url" placeholder="https://youtube.com/watch?v=...">
                     <button onclick="processVideo()">Analyze Video</button>
                 </div>
