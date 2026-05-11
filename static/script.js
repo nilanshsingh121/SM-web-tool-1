@@ -7,6 +7,7 @@
 }
 
 // Study Planner
+// Study Planner
 document.getElementById('study-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const subjects = document.getElementById('subjects').value.trim();
@@ -15,7 +16,7 @@ document.getElementById('study-form').addEventListener('submit', async (e) => {
     const resultsContainer = document.getElementById('results-container');
     const studyPlanDiv = document.getElementById('study-plan');
 
-    studyPlanDiv.innerHTML = '<p>Generating your plan...</p>';
+    studyPlanDiv.innerHTML = '<p>Generating your study plan...</p>';
     resultsContainer.style.display = 'block';
 
     try {
@@ -27,16 +28,24 @@ document.getElementById('study-form').addEventListener('submit', async (e) => {
         const data = await res.json();
 
         if (res.ok) {
-            let html = '';
+            let html = '<div class="plan-list">';
+            
             for (const day in data.plan) {
-                html += `<div class="plan-item"><strong>${day}:</strong> ${data.plan[day]}</div>`;
+                html += `
+                    <div class="plan-item">
+                        <strong>${day}:</strong> 
+                        <span>${data.plan[day]}</span>
+                    </div>
+                `;
             }
+            
+            html += '</div>';
             studyPlanDiv.innerHTML = html;
         } else {
             studyPlanDiv.innerHTML = `<p style="color:red;">${data.error}</p>`;
         }
     } catch (err) {
-        studyPlanDiv.innerHTML = '<p style="color:red;">Something went wrong. Try again.</p>';
+        studyPlanDiv.innerHTML = '<p style="color:red;">Something went wrong. Please try again.</p>';
     }
 });
 
