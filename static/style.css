@@ -122,4 +122,24 @@ button:hover {
 .upload-area:hover {
     border-color: #a78bfa;
     background: #272e44;
+}/* Study Plan Styling */
+.plan-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.plan-item {
+    background: rgba(30, 41, 59, 0.8);
+    padding: 18px 22px;
+    border-radius: 16px;
+    border-left: 6px solid #14b8a6;
+    font-size: 1.08rem;
+    line-height: 1.6;
+}
+
+.plan-item strong {
+    color: #67e8f9;
+    margin-right: 10px;
 }
