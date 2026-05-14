@@ -119,10 +119,12 @@ def generate_plan():
         return jsonify({'error': str(e)}), 500
 
 # PDF Upload
+# PDF Upload with OpenAI
 @app.route('/upload_pdf', methods=['POST'])
 def upload_pdf():
     if 'pdf' not in request.files:
         return jsonify({'error': 'No PDF uploaded'}), 400
+    
     file = request.files['pdf']
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
@@ -131,6 +133,7 @@ def upload_pdf():
     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     file.save(filepath)
 
+    # Extract text from PDF
     text = ""
     try:
         reader = PyPDF2.PdfReader(filepath)
@@ -139,13 +142,28 @@ def upload_pdf():
     except:
         text = "Could not extract text from PDF."
 
+    # OpenAI se Real Summary generate karo
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",   # ya gpt-4o-mini (sasta aur fast)
+            messages=[
+                {"role": "system", "content": "You are an expert study assistant. Summarize the content in a student-friendly way."},
+                {"role": "user", "content": f"Summarize this study material in simple language with key points:\n\n{text[:12000]}"}
+            ],
+            max_tokens=800,
+            temperature=0.7
+        )
+        summary = response.choices[0].message.content.strip()
+    except Exception as e:
+        summary = "AI summary could not be generated. Here's the extracted text:\n\n" + text[:800]
+
     return jsonify({
-        'summary': f"📄 Summary of {filename}:\n\n{text[:800]}...",
+        'summary': f"📄 AI Summary of {filename}:\n\n{summary}",
         'flashcards': [
-            {"q": "What is the main topic?", "a": "This PDF covers important concepts of the subject."},
-            {"q": "Key takeaway?", "a": "Focus on definitions and examples given."}
+            {"q": "Main Topic Kya Hai?", "a": "Yeh PDF important concepts cover karta hai."},
+            {"q": "Key Takeaway?", "a": "Definitions aur examples pe focus karo."}
         ],
-        'notes': "• Important definitions\n• Key formulas/examples\n• Practice tips\n• Common mistakes to avoid",
+        'notes': "• Important definitions\n• Key formulas aur examples\n• Practice questions\n• Common mistakes",
         'filename': filename
     })
 
