@@ -2,3 +2,5 @@ flask
 PyPDF2
 werkzeug
 gunicorn
+openai
+python-dotenv
